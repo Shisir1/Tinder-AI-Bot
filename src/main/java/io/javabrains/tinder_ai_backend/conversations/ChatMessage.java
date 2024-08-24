@@ -1,2 +1,10 @@
-package io.javabrains.tinder_ai_backend.conversations;public record ChatMessage() {
+package io.javabrains.tinder_ai_backend.conversations;
+
+import java.time.LocalDateTime;
+
+public record ChatMessage(
+        String messageText,
+        String authorId,
+        LocalDateTime messageTime
+) {
 }
