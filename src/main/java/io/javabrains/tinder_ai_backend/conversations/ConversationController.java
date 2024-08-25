@@ -3,10 +3,7 @@ package io.javabrains.tinder_ai_backend.conversations;
 import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonValueFormat;
 import io.javabrains.tinder_ai_backend.profiles.ProfileRepository;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
@@ -23,7 +20,15 @@ public class ConversationController {
         this.conversationRepository = conversationRepository;
         this.profileRepository = profileRepository;
     }
-    @PostMapping("/conversations")
+
+    @GetMapping("/conversations/{conversationId}")
+    public Conversation getConversation(@PathVariable String conversationId) {
+
+        return conversationRepository.findById(conversationId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Unable to find a profile with that ID" + conversationId
+                ));
+    }
+        @PostMapping("/conversations")
     public Conversation createNewConversation(@RequestBody CreateConversationRequest request){
 
         profileRepository.findById(request.profileId())
