@@ -6,6 +6,9 @@ import io.javabrains.tinder_ai_backend.conversations.ConversationRepository;
 import io.javabrains.tinder_ai_backend.profiles.Gender;
 import io.javabrains.tinder_ai_backend.profiles.Profile;
 import io.javabrains.tinder_ai_backend.profiles.ProfileRepository;
+import org.springframework.ai.chat.model.ChatResponse;
+import org.springframework.ai.chat.prompt.Prompt;
+import org.springframework.ai.openai.OpenAiChatModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -19,14 +22,20 @@ public class TinderAiBackendApplication implements CommandLineRunner {
 
 	@Autowired
 	private ProfileRepository profileRepository;
-
 	@Autowired
 	private ConversationRepository conversationRepository;
+	@Autowired
+	private OpenAiChatModel chatClient;
 	public static void main(String[] args) {
 		SpringApplication.run(TinderAiBackendApplication.class, args);
 	}
 
 	public void run(String... args){
+
+
+		Prompt prompt = new Prompt("who is Shisir Humagain?");
+		ChatResponse response = chatClient.call(prompt);
+		System.out.println(response.getResult().getOutput());
 
 		//to delete all the profiles and conversations prior to this run
 		profileRepository.deleteAll();
@@ -50,7 +59,7 @@ public class TinderAiBackendApplication implements CommandLineRunner {
 				"bar",
 				40,
 				"test",
-				Gender.MALE,
+				Gender.FEMALE,
 				"Software Engineer",
 				"foo.jpg",
 				"INTP");
